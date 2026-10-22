@@ -28,9 +28,4 @@ void deck_init(Deck* deck, int amount);
 void shuffle_deck(Deck* deck);
 Card next_card(Deck* deck);
 void display_card(Card* card);
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 2bae72b (Added stage 3 to ride the bus)
 #endif
