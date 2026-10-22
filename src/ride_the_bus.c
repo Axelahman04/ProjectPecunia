@@ -14,6 +14,7 @@ struct ride_the_bus {
 
 int balance = 1000;
 
+<<<<<<< HEAD
 void start_ride_the_bus(){
     printf("Welcome to Ride The Bus!\n"); 
     printf("Your balance: %d\n", balance); 
@@ -78,6 +79,8 @@ void start_ride_the_bus(){
     
 }
 
+=======
+>>>>>>> 2bae72b (Added stage 3 to ride the bus)
 
 int ride_the_bus_money() {
     printf("Your balance is : %d\n", balance);   
@@ -126,22 +129,30 @@ int stage_2(struct ride_the_bus* game){
     printf("Will the next card be: Lower (0) or Higher (1), or do you want Forfeit (2) to keep your winnings?\n");
     int choice = get_number_input(0,2); 
 
+    display_card(&second_card); 
+
     //Forfeit
     if (choice == 2){
         return 2;
     }
 
+<<<<<<< HEAD
     display_card(&second_card);
 
     if(game->cards[1].value < game->cards[0].value && choice == 0) {
         return 1;
     } else if (game->cards[1].value > game->cards[0].value && choice == 1) {
+=======
+    if(&game->cards[1].value < &game->cards[0].value && choice == 0) {
+        return 1;
+    } else if (&game->cards[1].value > &game->cards[0].value && choice == 1) {
+>>>>>>> 2bae72b (Added stage 3 to ride the bus)
         return 1;
     }
-
     return 0;
 }
 
+<<<<<<< HEAD
 int stage_4(struct ride_the_bus* game) {
     printf("What suit will the the next card be: Club (0), Diamond (1), Heart (2), Spade (3), or do you want to forfeit (4) and keep your winnings\n?");
 
@@ -166,3 +177,104 @@ int stage_4(struct ride_the_bus* game) {
         return 0;
     }
 }
+=======
+int stage_3(struct ride_the_bus* game){
+
+    Card third_card = next_card(&game->deck);
+    game->cards[2] = third_card;
+
+    printf("Will the next card be: Inside (0) or Outside (1), or do you want Forfeit (2) to keep your winnings?\n");
+    int choice = get_number_input(0,2); 
+
+    display_card(&third_card);   
+
+    //Forfeit
+    if (choice == 2){
+        return 2;
+    }
+
+    //Check if third card is inside first two.
+    if(&game->cards[0].value <= &game->cards[2].value){
+        if(&game->cards[2].value <= &game->cards[1].value){
+            if(choice == 0){
+                return 1;
+            }
+        }
+    }
+
+    //Check if third card is outside first two. (lower)
+    if(&game->cards[0].value >= &game->cards[2].value){
+        if(&game->cards[2].value <= &game->cards[1].value){
+            if(choice == 1){
+                return 1;
+            }
+        }
+    }
+
+     //Check if third card is outside first two. (higher)
+    if(&game->cards[0].value <= &game->cards[2].value){
+        if(&game->cards[2].value >= &game->cards[1].value){
+            if(choice == 1){
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+void start_ride_the_bus(){
+    printf("Welcome to Ride The Bus!\n"); 
+    printf("Your balance: %d\n", balance); 
+
+    while(1){
+        struct ride_the_bus game;
+
+        Deck deck;
+        deck_init(&deck, 1);
+        shuffle_deck(&deck);  
+
+        game.deck = deck;
+        
+        game.bet_amount = ride_the_bus_money();
+
+        int result = stage_1(&game);
+
+        if (result == 1) {
+            printf("You win, your bet has increased 2x to: %d dollars!\n", game.bet_amount * 2);
+        } else {
+            balance -= game.bet_amount;
+            printf("You lost :(\n");
+            continue;
+        }
+
+        result = stage_2(&game);
+
+        switch (result) {
+            case 0:
+                balance -= game.bet_amount;
+                printf("You lost :(\n");
+                continue;
+            case 1:
+                printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
+                break;
+            case 2:
+                continue;
+
+        }
+
+        result = stage_3(&game);
+
+        switch (result) {
+            case 0:
+                balance -= game.bet_amount;
+                printf("You lost :(\n");
+                continue;
+            case 1:
+                printf("You win, your bet has increased 4x to: %d dollars!\n", game.bet_amount * 4);
+                break;
+            case 2:
+                continue;
+        }
+    }
+}
+>>>>>>> 2bae72b (Added stage 3 to ride the bus)
