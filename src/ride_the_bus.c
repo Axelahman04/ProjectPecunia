@@ -48,8 +48,10 @@ void start_ride_the_bus(){
         switch(random_first_suit){
             case 0:
                 printf("The card was red\n");
+                break;
             case 1:
                 printf("The card was black\n");
+                break;
             }
 
         //Check if user won or lost
@@ -57,12 +59,12 @@ void start_ride_the_bus(){
             //WIN
             printf("You win, your bet has increased 2x to: %d dollars!\n", bet_amount * 2);
             break;
-            } else{
-                //LOSE
-                balance -= bet_amount;
-                printf("You lost. New balace: %d\n",balance);
-            }
+        } else{
+            //LOSE
+            balance -= bet_amount;
+            printf("You lost. New balace: %d\n",balance);
         }
+    }
     
     printf("This is round 2\n");
     

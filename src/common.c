@@ -41,4 +41,11 @@ void shuffle_deck(Deck* deck) {
     }
 }
 
+Card next_card(Deck* deck) {
+    Card top_card = deck->cards[deck->pointer];
+    deck->pointer++;
+
+    return top_card;
+}
+
 

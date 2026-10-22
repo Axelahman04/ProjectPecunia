@@ -22,7 +22,8 @@ typedef struct {
 } Deck;
 
 // 3. Prototyper för dina funktioner
-void deck_init(Deck* d, int amount);
-void shuffle_deck(Deck* d);
+void deck_init(Deck* deck, int amount);
+void shuffle_deck(Deck* deck);
+Card next_card(Deck* deck);
 
 #endif
