@@ -2,7 +2,7 @@
 
 void start_ride_the_bus();
 
-main(){
+int main(){
     start_ride_the_bus();
     return 0;
 }
