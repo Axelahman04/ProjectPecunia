@@ -14,73 +14,6 @@ struct ride_the_bus {
 
 int balance = 1000;
 
-<<<<<<< HEAD
-void start_ride_the_bus(){
-    printf("Welcome to Ride The Bus!\n"); 
-    printf("Your balance: %d\n", balance); 
-
-    while(1){
-        struct ride_the_bus game;
-
-        Deck deck;
-        deck_init(&deck, 1);
-        shuffle_deck(&deck);  
-
-        game.deck = deck;
-        
-        game.bet_amount = ride_the_bus_money();
-
-        int result = stage_1(&game);
-
-        if (result == 1) {
-            printf("You win, your bet has increased 2x to: %d dollars!\n", game.bet_amount * 2);
-        } else {
-            balance -= game.bet_amount;
-            printf("You lost :(\n");
-            continue;
-        }
-
-        result = stage_2(&game);
-
-        switch (result) {
-            case 0:
-                balance -= game.bet_amount;
-                printf("You lost :(\n");
-                continue;
-            case 1:
-                printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
-                break;
-            case 2:
-                balance += game.bet_amount * 2;
-                continue;
-
-        }
-
-        result = stage_4(&game);
-
-        switch (result) {
-            case 0:
-                balance -= game.bet_amount;
-                printf("You lost :(\n");
-                continue;
-            case 1:
-                printf("You win, your bet has increased 20x to: %d dollars!\n", game.bet_amount * 20);
-                balance += game.bet_amount * 20;
-                break;
-            case 2:
-                balance += game.bet_amount * 4;
-                continue;
-
-        }
-
-    }
-    
-    printf("This is round 2\n");
-    
-}
-
-=======
->>>>>>> 2bae72b (Added stage 3 to ride the bus)
 
 int ride_the_bus_money() {
     printf("Your balance is : %d\n", balance);   
@@ -136,23 +69,16 @@ int stage_2(struct ride_the_bus* game){
         return 2;
     }
 
-<<<<<<< HEAD
     display_card(&second_card);
 
     if(game->cards[1].value < game->cards[0].value && choice == 0) {
         return 1;
     } else if (game->cards[1].value > game->cards[0].value && choice == 1) {
-=======
-    if(&game->cards[1].value < &game->cards[0].value && choice == 0) {
-        return 1;
-    } else if (&game->cards[1].value > &game->cards[0].value && choice == 1) {
->>>>>>> 2bae72b (Added stage 3 to ride the bus)
         return 1;
     }
     return 0;
 }
 
-<<<<<<< HEAD
 int stage_4(struct ride_the_bus* game) {
     printf("What suit will the the next card be: Club (0), Diamond (1), Heart (2), Spade (3), or do you want to forfeit (4) and keep your winnings\n?");
 
@@ -177,7 +103,6 @@ int stage_4(struct ride_the_bus* game) {
         return 0;
     }
 }
-=======
 int stage_3(struct ride_the_bus* game){
 
     Card third_card = next_card(&game->deck);
@@ -277,4 +202,3 @@ void start_ride_the_bus(){
         }
     }
 }
->>>>>>> 2bae72b (Added stage 3 to ride the bus)
