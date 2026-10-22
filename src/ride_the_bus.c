@@ -50,6 +50,24 @@ void start_ride_the_bus(){
                 printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
                 break;
             case 2:
+                balance += game.bet_amount * 2;
+                continue;
+
+        }
+
+        result = stage_4(&game);
+
+        switch (result) {
+            case 0:
+                balance -= game.bet_amount;
+                printf("You lost :(\n");
+                continue;
+            case 1:
+                printf("You win, your bet has increased 20x to: %d dollars!\n", game.bet_amount * 20);
+                balance += game.bet_amount * 20;
+                break;
+            case 2:
+                balance += game.bet_amount * 4;
                 continue;
 
         }
@@ -113,11 +131,38 @@ int stage_2(struct ride_the_bus* game){
         return 2;
     }
 
-    if(&game->cards[1].value < &game->cards[0] && choice == 0) {
+    display_card(&second_card);
+
+    if(game->cards[1].value < game->cards[0].value && choice == 0) {
         return 1;
-    } else if (&game->cards[1].value > &game->cards[0] && choice == 1) {
+    } else if (game->cards[1].value > game->cards[0].value && choice == 1) {
         return 1;
     }
 
     return 0;
+}
+
+int stage_4(struct ride_the_bus* game) {
+    printf("What suit will the the next card be: Club (0), Diamond (1), Heart (2), Spade (3), or do you want to forfeit (4) and keep your winnings\n?");
+
+    int choice = get_number_input(0,4); 
+
+    if (choice == 4) {
+        return 2;
+    }
+    
+    //Game picks a random card
+    Card fourth_card = next_card(&game->deck);
+    game->cards[0] = fourth_card;
+
+    display_card(&fourth_card);         
+
+    //Check if user won or lost
+    if(choice == &fourth_card.suit){
+        //WIN
+        return 1;
+    } else{
+        //LOSE
+        return 0;
+    }
 }
