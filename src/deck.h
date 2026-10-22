@@ -10,6 +10,8 @@ typedef struct {
     int suit;
 } Card;
 
+int card_color(Card* card);
+
 typedef struct {
     // Amount of decks that are being used
     int deck_amount;

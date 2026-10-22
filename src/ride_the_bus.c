@@ -1,71 +1,123 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "deck.h"
+
+int get_number_input(int min, int max);
+
+
+struct ride_the_bus {
+    Deck deck;
+    Card cards[4];
+    int bet_amount;
+};
+
 
 int balance = 1000;
-int bet_amount = 10;
-
-//User input
-int user_bet_amount_input;
-int user_suit_choice_input;
 
 void start_ride_the_bus(){
     printf("Welcome to Ride The Bus!\n"); 
+    printf("Your balance: %d\n", balance); 
+
     while(1){
-        printf("Your balance: %d\n", balance); 
+        struct ride_the_bus game;
 
-        printf("Please enter bet amount: \n"); 
+        Deck deck;
+        deck_init(&deck, 1);
+        shuffle_deck(&deck);  
 
-        //Take user bet amount
-        while(1){
-            scanf("%d", &user_bet_amount_input);
-            if(user_bet_amount_input >= 1 && user_bet_amount_input <= balance){
-                bet_amount = user_bet_amount_input;
-                break;
-            } else {
-                printf("Bet amount needs to be atleast 1 and at most %d\nPlease enter bet amount: \n", balance);
-            }
+        game.deck = deck;
+        
+        game.bet_amount = ride_the_bus_money();
+
+        int result = stage_1(&game);
+
+        if (result == 1) {
+            printf("You win, your bet has increased 2x to: %d dollars!\n", game.bet_amount * 2);
+        } else {
+            balance -= game.bet_amount;
+            printf("You lost :(\n");
+            continue;
         }
 
-        printf("You successfully bet: %d dollars!\n", user_bet_amount_input);
-        printf("Red (0) or Black (1)?\n");
+        result = stage_2(&game);
 
-        //Take user bet on color
-        scanf("%d", &user_suit_choice_input);
-
-        switch(user_suit_choice_input){
+        switch (result) {
             case 0:
-                printf("You successfully chose Red\n");
-                break;
+                balance -= game.bet_amount;
+                printf("You lost :(\n");
+                continue;
             case 1:
-                printf("You sucessfully chose Black\n");
+                printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
                 break;
+            case 2:
+                continue;
+
         }
 
-        //Game picks a color (Red:0, Black:1)
-        int random_first_suit = rand() % 2;
-
-        //Print color of the drawn card
-        switch(random_first_suit){
-            case 0:
-                printf("The card was red\n");
-                break;
-            case 1:
-                printf("The card was black\n");
-                break;
-            }
-
-        //Check if user won or lost
-        if(user_suit_choice_input == random_first_suit){
-            //WIN
-            printf("You win, your bet has increased 2x to: %d dollars!\n", bet_amount * 2);
-            break;
-        } else{
-            //LOSE
-            balance -= bet_amount;
-            printf("You lost. New balace: %d\n",balance);
-        }
     }
     
     printf("This is round 2\n");
     
+}
+
+
+int ride_the_bus_money() {
+    printf("Your balance is : %d\n", balance);   
+    printf("How much do you want to bet?\n");   
+    int bet_amount = get_number_input(1,balance);  
+
+    printf("You successfully bet: %d dollars!\n", bet_amount);
+    return bet_amount;
+}
+
+int stage_1(struct ride_the_bus* game) {
+    printf("Red (0) or Black (1)?\n");
+
+    int color = get_number_input(0,1);
+
+    switch(color){
+        case 0:
+            printf("You successfully chose Red\n");
+            break;
+        case 1:
+            printf("You sucessfully chose Black\n");
+            break;
+    }
+
+    //Game picks a random card
+    Card first_card = next_card(&game->deck);
+    game->cards[0] = first_card;
+
+    display_card(&first_card);         
+
+    //Check if user won or lost
+    if(color == card_color(&first_card)){
+        //WIN
+        return 1;
+    } else{
+        //LOSE
+        return 0;
+    }
+} 
+
+int stage_2(struct ride_the_bus* game){
+
+    Card second_card = next_card(&game->deck);
+    game->cards[1] = second_card;
+
+    printf("Will the next card be: Lower (0) or Higher (1), or do you want Forfeit (2) to keep your winnings?\n");
+    int choice = get_number_input(0,2); 
+
+    //Forfeit
+    if (choice == 2){
+        return 2;
+    }
+
+    if(&game->cards[1].value < &game->cards[0] && choice == 0) {
+        return 1;
+    } else if (&game->cards[1].value > &game->cards[0] && choice == 1) {
+        return 1;
+    }
+
+    return 0;
 }

@@ -5,6 +5,24 @@
 #define MAX_DECKS 8
 
 
+int card_color(Card* card) {
+    switch(card->suit) {
+        case 0: 
+            return 1;
+        case 1:
+            return 0;
+        case 2:
+            return 0;
+        case 3:
+            return 1;
+    }
+}
+
+void display_card(Card* card) {
+    printf("The card is %d of %d\n", card->value, card->suit);
+}
+
+
 void generate_standard_cards(Card* start_location) {
     int index = 0;
     for (int suit = 0; suit < 4; suit++) {
@@ -47,5 +65,24 @@ Card next_card(Deck* deck) {
 
     return top_card;
 }
+
+
+int get_number_input(int min, int max) {
+    int input;
+
+    if (scanf("%d", &input) == 1) {
+        if (input >= min && input <= max) {
+            return input;
+        } else {
+            printf("Amount needs to be between %d and %d\n", min, max);
+        }
+    } else {
+        printf("Invalid input. Please enter a number.\n");
+
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+    }
+}
+
 
 
