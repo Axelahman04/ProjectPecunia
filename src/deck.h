@@ -27,5 +27,7 @@ typedef struct {
 void deck_init(Deck* deck, int amount);
 void shuffle_deck(Deck* deck);
 Card next_card(Deck* deck);
+void display_card(Card* card);
+
 
 #endif
