@@ -119,8 +119,8 @@ int stage_3(struct ride_the_bus* game){
     }
 
     //Check if third card is inside first two.
-    if(&game->cards[0].value <= &game->cards[2].value){
-        if(&game->cards[2].value <= &game->cards[1].value){
+    if(game->cards[0].value <= game->cards[2].value){
+        if(game->cards[2].value <= game->cards[1].value){
             if(choice == 0){
                 return 1;
             }
@@ -128,8 +128,8 @@ int stage_3(struct ride_the_bus* game){
     }
 
     //Check if third card is outside first two. (lower)
-    if(&game->cards[0].value >= &game->cards[2].value){
-        if(&game->cards[2].value <= &game->cards[1].value){
+    if(game->cards[0].value >= game->cards[2].value){
+        if(game->cards[2].value <= game->cards[1].value){
             if(choice == 1){
                 return 1;
             }
@@ -137,8 +137,8 @@ int stage_3(struct ride_the_bus* game){
     }
 
      //Check if third card is outside first two. (higher)
-    if(&game->cards[0].value <= &game->cards[2].value){
-        if(&game->cards[2].value >= &game->cards[1].value){
+    if(game->cards[0].value <= game->cards[2].value){
+        if(game->cards[2].value >= game->cards[1].value){
             if(choice == 1){
                 return 1;
             }
@@ -183,6 +183,7 @@ void start_ride_the_bus(){
                 printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
                 break;
             case 2:
+                balance += game.bet_amount;
                 continue;
 
         }
@@ -198,7 +199,25 @@ void start_ride_the_bus(){
                 printf("You win, your bet has increased 4x to: %d dollars!\n", game.bet_amount * 4);
                 break;
             case 2:
+                balance += game.bet_amount * 2;
                 continue;
         }
+
+        result = stage_4(&game);
+
+        switch (result) {
+            case 0:
+                balance -= game.bet_amount;
+                printf("You lost :(\n");
+                continue;
+            case 1:
+                printf("You win, your bet has increased 20x to: %d dollars!\n", game.bet_amount * 20);
+                balance += game.bet_amount * 19;
+                break;
+            case 2:
+                balance += game.bet_amount * 3;
+                continue;
+        }
+
     }
 }
