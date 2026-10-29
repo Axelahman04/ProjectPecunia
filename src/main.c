@@ -4,12 +4,12 @@
 #include "deck.h"
 
 void start_ride_the_bus();
-void deck_init();
+void start_blackjack();
 typedef struct Deck;
 
 int main(){
     srand(time(NULL));
-    start_ride_the_bus(); 
+    start_blackjack(); 
 
     return 0;
 }

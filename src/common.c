@@ -66,6 +66,17 @@ Card next_card(Deck* deck) {
     return top_card;
 }
 
+int deck_contains(Card *deck, int value) {
+    int size = sizeof(*deck) / sizeof(Card);
+    
+    for (int i = 0; i < size; i++) {
+        if (deck[i].value == value)
+            return 1;
+    }
+
+    return 0;
+}
+
 
 int get_number_input(int min, int max) {
     int input;
@@ -85,4 +96,11 @@ int get_number_input(int min, int max) {
 }
 
 
-
+int clamp(int value, int min, int max) {
+    if (value < min)
+        return min;
+    else if (value > max)
+        return max;
+    
+    return value;
+}
