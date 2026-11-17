@@ -9,9 +9,8 @@ void display_frame(struct frame_data *data) {
 
     for (int i = 0; i < 320*480; i++)
         VGA[i] = data->background_color;
-    
-    int object_list_length = sizeof(data->object_list) / sizeof(Card);
-    for (int i = 0; i < object_list_length; i++) {
+
+    for (int i = 0; i < data->object_pointer; i++) {
         Card object = data->object_list[i];
         
         int position = object.pos_x + (object.pos_y * 320); 
