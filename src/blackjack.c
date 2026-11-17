@@ -43,7 +43,7 @@ void draw_card_dealer(struct blackjack *game, int hidden) {
     }
 
     new_card.pos_x = 80 + (40 * game->dealer_pointer);
-    new_card.pos_y = 40 + (5 * game->dealer_pointer);
+    new_card.pos_y = 280 + (5 * game->dealer_pointer);
 
     game->frame.object_list[game->frame.object_pointer] = new_card;
     game->frame.object_pointer++;    
