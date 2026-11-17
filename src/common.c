@@ -19,7 +19,7 @@ int card_color(Card* card) {
 }
 
 void display_card(Card* card) {
-    printf("The card is %d of %d\n", card->value, card->suit);
+
 }
 
 
@@ -37,11 +37,10 @@ void generate_standard_cards(Card* start_location) {
 
 
 void deck_init(Deck* deck, int amount) {
-    deck->deck_amount = amount;
-    deck->cards = malloc(52 * amount * sizeof(Card));
+    deck->deck_amount = 1;
     deck->pointer = 0;
 
-    for (int i = 0; i < amount; i++) {
+    for (int i = 0; i < 1; i++) {
         Card* insertion_point = &deck->cards[i * 52]; 
         
         generate_standard_cards(insertion_point);   
@@ -51,7 +50,7 @@ void deck_init(Deck* deck, int amount) {
 void shuffle_deck(Deck* deck) {
     int total_cards = 52 * deck->deck_amount;
     for (int i = total_cards - 1; i >= 1; i--){
-        int j = rand() % (i + 1);
+        int j = my_rand() % (i + 1);
 
         Card temp = deck->cards[i];
         deck->cards[i] = deck->cards[j];
@@ -79,20 +78,7 @@ int deck_contains(Card *deck, int value) {
 
 
 int get_number_input(int min, int max) {
-    int input;
 
-    if (scanf("%d", &input) == 1) {
-        if (input >= min && input <= max) {
-            return input;
-        } else {
-            printf("Amount needs to be between %d and %d\n", min, max);
-        }
-    } else {
-        printf("Invalid input. Please enter a number.\n");
-
-        int c;
-        while ((c = getchar()) != '\n' && c != EOF);
-    }
 }
 
 
@@ -103,4 +89,27 @@ int clamp(int value, int min, int max) {
         return max;
     
     return value;
+}
+
+// ------------ AI GENERATED COME BACK (gemmani) ------
+
+// 1. Read the RISC-V internal cycle counter
+unsigned int get_cycles() {
+    unsigned int cycles;
+    // 'rdcycle' is a standard RISC-V instruction that returns the 
+    // number of clock cycles executed since the processor booted.
+    asm volatile ("rdcycle %0" : "=r" (cycles));
+    return cycles;
+}
+
+// 2. Linear Congruential Generator (from previous step)
+static unsigned int next = 1;
+
+void my_srand(unsigned int seed) {
+    next = seed;
+}
+
+int my_rand(void) {
+    next = next * 1103515245 + 12345;
+    return (unsigned int)(next / 65536) % 32768;
 }

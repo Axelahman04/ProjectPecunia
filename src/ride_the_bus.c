@@ -15,26 +15,19 @@ struct ride_the_bus {
 int balance = 1000;
 
 
-int ride_the_bus_money() {
-    printf("Your balance is : %d\n", balance);   
-    printf("How much do you want to bet?\n");   
+int ride_the_bus_money() {  
     int bet_amount = get_number_input(1,balance);  
 
-    printf("You successfully bet: %d dollars!\n", bet_amount);
     return bet_amount;
 }
 
 int stage_1(struct ride_the_bus* game) {
-    printf("Red (0) or Black (1)?\n");
-
     int color = get_number_input(0,1);
 
     switch(color){
         case 0:
-            printf("You successfully chose Red\n");
             break;
         case 1:
-            printf("You sucessfully chose Black\n");
             break;
     }
 
@@ -59,7 +52,6 @@ int stage_2(struct ride_the_bus* game){
     Card second_card = next_card(&game->deck);
     game->cards[1] = second_card;
 
-    printf("Will the next card be: Lower (0) or Higher (1), or do you want Forfeit (2) to keep your winnings?\n");
     int choice = get_number_input(0,2); 
 
     display_card(&second_card); 
@@ -80,8 +72,6 @@ int stage_2(struct ride_the_bus* game){
 }
 
 int stage_4(struct ride_the_bus* game) {
-    printf("What suit will the the next card be: Club (0), Diamond (1), Heart (2), Spade (3), or do you want to forfeit (4) and keep your winnings\n?");
-
     int choice = get_number_input(0,4); 
 
     if (choice == 4) {
@@ -108,7 +98,6 @@ int stage_3(struct ride_the_bus* game){
     Card third_card = next_card(&game->deck);
     game->cards[2] = third_card;
 
-    printf("Will the next card be: Inside (0) or Outside (1), or do you want Forfeit (2) to keep your winnings?\n");
     int choice = get_number_input(0,2); 
 
     display_card(&third_card);   
@@ -148,8 +137,6 @@ int stage_3(struct ride_the_bus* game){
 }
 
 void start_ride_the_bus(){
-    printf("Welcome to Ride The Bus!\n"); 
-    printf("Your balance: %d\n", balance); 
 
     while(1){
         struct ride_the_bus game;
@@ -165,10 +152,8 @@ void start_ride_the_bus(){
         int result = stage_1(&game);
 
         if (result == 1) {
-            printf("You win, your bet has increased 2x to: %d dollars!\n", game.bet_amount * 2);
         } else {
             balance -= game.bet_amount;
-            printf("You lost :(\n");
             continue;
         }
 
@@ -177,10 +162,8 @@ void start_ride_the_bus(){
         switch (result) {
             case 0:
                 balance -= game.bet_amount;
-                printf("You lost :(\n");
                 continue;
             case 1:
-                printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
                 break;
             case 2:
                 balance += game.bet_amount;
@@ -193,10 +176,8 @@ void start_ride_the_bus(){
         switch (result) {
             case 0:
                 balance -= game.bet_amount;
-                printf("You lost :(\n");
                 continue;
             case 1:
-                printf("You win, your bet has increased 4x to: %d dollars!\n", game.bet_amount * 4);
                 break;
             case 2:
                 balance += game.bet_amount * 2;
@@ -208,10 +189,8 @@ void start_ride_the_bus(){
         switch (result) {
             case 0:
                 balance -= game.bet_amount;
-                printf("You lost :(\n");
                 continue;
             case 1:
-                printf("You win, your bet has increased 20x to: %d dollars!\n", game.bet_amount * 20);
                 balance += game.bet_amount * 19;
                 break;
             case 2:

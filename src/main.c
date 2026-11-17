@@ -5,10 +5,13 @@
 
 void start_ride_the_bus();
 void start_blackjack();
+void my_srand(unsigned int seed);
+unsigned int get_cycles();
 typedef struct Deck;
 
 int main(){
-    srand(time(NULL));
+    int r_seed = get_cycles();
+    my_srand(r_seed); 
     start_blackjack(); 
 
     return 0;
