@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "deck.h"
+#include "graphics.h"
 
 int get_number_input(int min, int max);
 int clamp(int value, int min, int max);
+void display_frame(struct frame_data *data);
 
 static float balance = 1000.0;
 
@@ -15,11 +17,20 @@ struct blackjack {
     Card dealer_hand[11];
     int dealer_pointer;
     int bet_amount;
+
+    struct frame_data frame;
 };
 
 void draw_card_player(struct blackjack *game) {
     Card new_card = next_card(&game->deck);
     printf("Drew a card for player:\n");
+
+    new_card.pos_x = 80 + (40 * game->player_pointer);
+    new_card.pos_y = 40 + (5 * game->player_pointer);
+
+    game->frame.object_list[game->frame.object_pointer] = new_card;
+    game->frame.object_pointer++;
+
     display_card(&new_card);
 
     game->player_hand[game->player_pointer] = new_card;
@@ -32,6 +43,12 @@ void draw_card_dealer(struct blackjack *game, int hidden) {
         printf("Drew a card for dealer:\n");
         display_card(&new_card);
     }
+
+    new_card.pos_x = 80 + (40 * game->dealer_pointer);
+    new_card.pos_y = 40 + (5 * game->dealer_pointer);
+
+    game->frame.object_list[game->frame.object_pointer] = new_card;
+    game->frame.object_pointer++;    
 
     game->dealer_hand[game->dealer_pointer] = new_card;
     game->dealer_pointer++;
@@ -81,6 +98,8 @@ int player_turn(struct blackjack *game) {
         return 0;
     
     draw_card_player(game);
+    display_frame(&game->frame);
+
     int new_hand_v = hand_value(game->player_hand, game->player_pointer, &ace_count);
 
     if (new_hand_v > 21) {
@@ -106,6 +125,8 @@ void dealer_turn(struct blackjack *game, int reveal) {
     }
     
     draw_card_dealer(game, 0);
+    display_frame(&game->frame);
+    
     int new_hand_v = hand_value(game->dealer_hand, game->dealer_pointer, &ace_count);
     printf("Dealers new hand totals to %d\n", new_hand_v);
 
@@ -118,9 +139,16 @@ void dealer_turn(struct blackjack *game, int reveal) {
 
 int start_sequence(struct blackjack *game){
     draw_card_player(game);
+    display_frame(&game->frame);
+
     draw_card_dealer(game, 0);
+    display_frame(&game->frame);
+
     draw_card_player(game);
+    display_frame(&game->frame);
+
     draw_card_dealer(game, 1);
+    display_frame(&game->frame);
 
     int ace_count = 0;
     int dealer_hand_v = hand_value(game->dealer_hand, game->dealer_pointer, &ace_count);
@@ -156,7 +184,9 @@ struct blackjack init_game(){
 
     Deck deck;
     deck_init(&deck, 8);
-    shuffle_deck(&deck);     
+    shuffle_deck(&deck);  
+    
+    game.frame.background_color = 0x2D;
     
     game.deck = deck;
     game.player_pointer = 0;
@@ -173,6 +203,8 @@ void start_blackjack() {
 
     struct blackjack game = init_game();
     balance -= game.bet_amount;
+
+    display_frame(&game.frame);
 
     int response = start_sequence(&game);
     if (response == 1) {

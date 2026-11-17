@@ -8,6 +8,9 @@ typedef struct {
 
     //0-3 Suits, 0:Club, 1:Diamond, 2:Heart, 3:Spade 
     int suit;
+
+    int pos_x;
+    int pos_y;
 } Card;
 
 int card_color(Card* card);
