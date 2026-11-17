@@ -13,3 +13,7 @@ int main(){
 
     return 0;
 }
+
+void handle_interrupt(unsigned cause){
+// Here interupts can be handled
+}
