@@ -31,6 +31,23 @@ static int place_bet() {
     return bet_amount;
 }
 
+static int is_inside(int value1, int value2, int value3) {
+    int high;
+    int low;
+    
+    if (value1 > value2){
+        high = value1;
+        low = value2;
+    }
+
+    if (value2 > value1){
+        high = value2;
+        low = value1;
+    }   
+    
+    return low <= value3 && value3 <= high;
+}
+
 static int evaluate_round(struct ride_the_bus *game) {
 
     switch(game->round){
@@ -62,32 +79,13 @@ static int evaluate_round(struct ride_the_bus *game) {
             int card2 = game->cards[1].value;
             int card3 = game->cards[2].value;
 
-            int high = card1;
-            int low = card1;
-            int is_inside = 0;
-            int is_outside = 0;
+            int inside = is_inside(card1, card2, card3);
 
-            if (card1 > card2){
-                high = card1;
-                low = card2;
-            }
-
-            if (card2 > card1){
-                high = card2;
-                low = card1;
-            }
-
-            if(low <= card3 && card3 <= high){
-                is_inside = 1;
-            } else {
-                is_outside = 1;
-            }
-
-            if(game->choice == 1 && is_inside){
+            if(game->choice == 1 && inside){
                 game->multiplier = 4;
                 return 0;
             }
-            if(game->choice == 2 && is_outside){
+            if(game->choice == 2 && !inside){
                 game->multiplier = 4;
                 return 0;
             }
