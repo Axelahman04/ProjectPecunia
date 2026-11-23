@@ -9,6 +9,7 @@ typedef struct {
     //0-3 Suits, 0:Club, 1:Diamond, 2:Heart, 3:Spade 
     int suit;
 
+    // position of card
     int pos_x;
     int pos_y;
 } Card;
@@ -20,7 +21,7 @@ typedef struct {
     int deck_amount;
 
     // The list of all the cards
-    Card *cards;
+    Card cards[52];
 
     // The pointer to where in the deck we are. 
     int pointer;

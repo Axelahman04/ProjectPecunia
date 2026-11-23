@@ -23,7 +23,6 @@ struct blackjack {
 
 void draw_card_player(struct blackjack *game) {
     Card new_card = next_card(&game->deck);
-    printf("Drew a card for player:\n");
 
     new_card.pos_x = 80 + (40 * game->player_pointer);
     new_card.pos_y = 40 + (5 * game->player_pointer);
@@ -40,12 +39,11 @@ void draw_card_player(struct blackjack *game) {
 void draw_card_dealer(struct blackjack *game, int hidden) {
     Card new_card = next_card(&game->deck);
     if (hidden == 0) {
-        printf("Drew a card for dealer:\n");
         display_card(&new_card);
     }
 
     new_card.pos_x = 80 + (40 * game->dealer_pointer);
-    new_card.pos_y = 40 + (5 * game->dealer_pointer);
+    new_card.pos_y = 200 + (5 * game->dealer_pointer);
 
     game->frame.object_list[game->frame.object_pointer] = new_card;
     game->frame.object_pointer++;    
@@ -80,18 +78,15 @@ int hand_value(Card *hand, int hand_pointer, int *ace_count) {
 }
 
 
-int place_bet() {  
-    printf("How much do you want to bet?\n");   
+int place_bet() {   
     int bet_amount = get_number_input(1,(int) balance);  
 
-    printf("You successfully bet: %d dollars!\n", bet_amount);
     return bet_amount;
 }
 
 int player_turn(struct blackjack *game) {
     int ace_count = 0;
     int hand_v = hand_value(game->player_hand, game->player_pointer, &ace_count); 
-    printf("Your current hand is totals to  %d, and you have %d Aces. Do you want to Stand (0) or Hit (1)\n?", hand_v, ace_count);
     
     int response = get_number_input(0, 1);
     if (response == 0)
@@ -103,7 +98,6 @@ int player_turn(struct blackjack *game) {
     int new_hand_v = hand_value(game->player_hand, game->player_pointer, &ace_count);
 
     if (new_hand_v > 21) {
-        printf("Your new hand totals to %d, and you have %d aces\n", new_hand_v, ace_count);
         return 1;
     }
     
@@ -115,9 +109,7 @@ void dealer_turn(struct blackjack *game, int reveal) {
     if (reveal == 1) {
         int hand_v = hand_value(game->dealer_hand, game->dealer_pointer, &ace_count); 
     
-        printf("The dealer reveals his card:\n");
         display_card(&game->dealer_hand[1]);
-        printf("His hand is %d\n", hand_v);
         
         if (hand_v >= 17) {
             return;
@@ -126,9 +118,8 @@ void dealer_turn(struct blackjack *game, int reveal) {
     
     draw_card_dealer(game, 0);
     display_frame(&game->frame);
-    
+
     int new_hand_v = hand_value(game->dealer_hand, game->dealer_pointer, &ace_count);
-    printf("Dealers new hand totals to %d\n", new_hand_v);
 
     if (new_hand_v > 17) {
         return;
@@ -166,15 +157,12 @@ void evaluate_win(struct blackjack *game){
     int player_hand_size = sizeof(game->player_hand) / sizeof(Card);
 
     if (player_hand_value < dealer_hand_value && dealer_hand_value > 21) {
-        printf("Dealer won :(\n");
+
     } else if (player_hand_value == dealer_hand_value) {
-        printf("Same value, push :/\n");
         balance += game->bet_amount;
     } else if (player_hand_value == 21 && (deck_contains(game->player_hand, 14) && player_hand_size == 2)) {
-        printf("You got a blackjack! You get 2.5x bet amount!\n");
         balance += (float) game->bet_amount * 2.5;
     } else {
-        printf("You won! You get 2x bet amount!\n");
         balance += game->bet_amount * 2;
     }
 }
@@ -198,31 +186,11 @@ struct blackjack init_game(){
 }
 
 void start_blackjack() {
-    printf("Welcome to Blackjack!\n"); 
-    printf("Your balance: %f\n", (int) balance); 
-
     struct blackjack game = init_game();
     balance -= game.bet_amount;
 
     display_frame(&game.frame);
 
     int response = start_sequence(&game);
-    if (response == 1) {
-        printf("The dealer reveals his card:\n");
-        display_card(&game.dealer_hand[1]);
-
-        printf("Dealer has 21, you lose :(\n");
-        return;
-    }
-
-    response = player_turn(&game);
-
-    if (response == 1){
-        printf("Your hand is over 21, that's a bust :(\n");
-        return;
-    }
-
-    dealer_turn(&game, 1);
-    evaluate_win(&game);
 }
 

@@ -27,7 +27,6 @@ static int place_bet() {
     printf("How much do you want to bet?\n");   
     int bet_amount = get_number_input(1,(int) balance);  
 
-    printf("You successfully bet: %d dollars!\n", bet_amount);
     return bet_amount;
 }
 
