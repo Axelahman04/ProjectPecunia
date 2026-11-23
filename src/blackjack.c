@@ -26,8 +26,11 @@ void draw_card_player(struct blackjack *game) {
 
     new_card.pos_x = 80 + (40 * game->player_pointer);
     new_card.pos_y = 40 + (5 * game->player_pointer);
+    int color = card_color(&new_card);
 
-    game->frame.object_list[game->frame.object_pointer] = new_card;
+    Sprite card_sprite = create_card_sprite(new_card, color);
+
+    game->frame.object_list[game->frame.object_pointer] = card_sprite;
     game->frame.object_pointer++;
 
     display_card(&new_card);
@@ -44,8 +47,11 @@ void draw_card_dealer(struct blackjack *game, int hidden) {
 
     new_card.pos_x = 80 + (40 * game->dealer_pointer);
     new_card.pos_y = 200 + (5 * game->dealer_pointer);
+    int color = card_color(&new_card);
 
-    game->frame.object_list[game->frame.object_pointer] = new_card;
+    Sprite card_sprite = create_card_sprite(new_card, color);
+
+    game->frame.object_list[game->frame.object_pointer] = card_sprite;
     game->frame.object_pointer++;    
 
     game->dealer_hand[game->dealer_pointer] = new_card;
