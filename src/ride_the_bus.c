@@ -1,223 +1,197 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "deck.h"
+#include "graphics.h"
 
 int get_number_input(int min, int max);
+int clamp(int value, int min, int max);
+void display_frame(struct frame_data *data);
 
+static float balance = 1000.0;
 
 struct ride_the_bus {
     Deck deck;
+
     Card cards[4];
+    int drawn_cards;
+
     int bet_amount;
+    int multiplier;
+    int round;
+    int choice;
+
+    struct frame_data frame;
 };
 
-
-int balance = 1000;
-
-
-int ride_the_bus_money() {
-    printf("Your balance is : %d\n", balance);   
+static int place_bet() {  
     printf("How much do you want to bet?\n");   
-    int bet_amount = get_number_input(1,balance);  
+    int bet_amount = get_number_input(1,(int) balance);  
 
     printf("You successfully bet: %d dollars!\n", bet_amount);
     return bet_amount;
 }
 
-int stage_1(struct ride_the_bus* game) {
-    printf("Red (0) or Black (1)?\n");
-
-    int color = get_number_input(0,1);
-
-    switch(color){
-        case 0:
-            printf("You successfully chose Red\n");
-            break;
-        case 1:
-            printf("You sucessfully chose Black\n");
-            break;
+static int is_inside(int value1, int value2, int value3) {
+    int high;
+    int low;
+    
+    if (value1 > value2){
+        high = value1;
+        low = value2;
     }
 
-    //Game picks a random card
-    Card first_card = next_card(&game->deck);
-    game->cards[0] = first_card;
-
-    display_card(&first_card);         
-
-    //Check if user won or lost
-    if(color == card_color(&first_card)){
-        //WIN
-        return 1;
-    } else{
-        //LOSE
-        return 0;
-    }
-} 
-
-int stage_2(struct ride_the_bus* game){
-
-    Card second_card = next_card(&game->deck);
-    game->cards[1] = second_card;
-
-    printf("Will the next card be: Lower (0) or Higher (1), or do you want Forfeit (2) to keep your winnings?\n");
-    int choice = get_number_input(0,2); 
-
-    display_card(&second_card); 
-
-    //Forfeit
-    if (choice == 2){
-        return 2;
-    }
-
-    display_card(&second_card);
-
-    if(game->cards[1].value < game->cards[0].value && choice == 0) {
-        return 1;
-    } else if (game->cards[1].value > game->cards[0].value && choice == 1) {
-        return 1;
-    }
-    return 0;
+    if (value2 > value1){
+        high = value2;
+        low = value1;
+    }   
+    
+    return low <= value3 && value3 <= high;
 }
 
-int stage_4(struct ride_the_bus* game) {
-    printf("What suit will the the next card be: Club (0), Diamond (1), Heart (2), Spade (3), or do you want to forfeit (4) and keep your winnings\n?");
+static int evaluate_round(struct ride_the_bus *game) {
 
-    int choice = get_number_input(0,4); 
+    switch(game->round){
+        case 1:
+            //Logic for round 1
+            if((game->choice)-1 == card_color(&game->cards[0])){
+                game->multiplier = 2;
+                return 0;
+            }
+            break;
 
-    if (choice == 4) {
-        return 2;
+        case 2:
+            //Logic for round 2, 1 for next card lower, 2 for next card higher
+            if(game->choice == 1 && game->cards[0].value > game->cards[1].value){
+                game->multiplier = 3;
+                return 0;
+            }
+
+            if(game->choice == 2 && game->cards[0].value < game->cards[1].value){
+                game->multiplier = 3;
+                return 0;
+            }
+            break;
+
+        case 3:
+        {
+            //Logic for round 3
+            int card1 = game->cards[0].value;
+            int card2 = game->cards[1].value;
+            int card3 = game->cards[2].value;
+
+            int inside = is_inside(card1, card2, card3);
+
+            if(game->choice == 1 && inside){
+                game->multiplier = 4;
+                return 0;
+            }
+            if(game->choice == 2 && !inside){
+                game->multiplier = 4;
+                return 0;
+            }
+        }
+            break;
+
+        case 4:
+            //Logic for round 4
+            if((game->choice)-1 == game->cards[3].suit){
+                game->multiplier = 20;
+                return 0;
+            }
+    }
+    return 1;
+}
+
+static void get_input(struct ride_the_bus *game) {
+    if (game->round < 4){
+        printf("0:Forfeit, 1, 2\n"); 
+        game->choice = get_number_input(0,2); 
     }
     
-    //Game picks a random card
-    Card fourth_card = next_card(&game->deck);
-    game->cards[0] = fourth_card;
-
-    display_card(&fourth_card);         
-
-    //Check if user won or lost
-    if(choice == &fourth_card.suit){
-        //WIN
-        return 1;
-    } else{
-        //LOSE
-        return 0;
+    if (game->round == 4){
+        printf("0:Forfeit, 1, 2, 3, 4\n"); 
+        game->choice = get_number_input(0,4); 
     }
 }
-int stage_3(struct ride_the_bus* game){
 
-    Card third_card = next_card(&game->deck);
-    game->cards[2] = third_card;
+static void draw_card(struct ride_the_bus *game) {
+    Card new_card = next_card(&game->deck);
 
-    printf("Will the next card be: Inside (0) or Outside (1), or do you want Forfeit (2) to keep your winnings?\n");
-    int choice = get_number_input(0,2); 
+    new_card.pos_x = 120 + (50 * game->drawn_cards);
+    new_card.pos_y = 40;
 
-    display_card(&third_card);   
+    game->cards[game->drawn_cards] = new_card;
+    game->drawn_cards++;
 
-    //Forfeit
-    if (choice == 2){
-        return 2;
+    //game->frame.object_list[game->frame.object_pointer] = new_card;
+    //game->frame.object_pointer++;
+
+    printf("Drew card: value %d, suit %d\n", new_card.value, new_card.suit);
+    //display_card(&new_card);
+}
+
+static int start_round(struct ride_the_bus *game) {
+
+    //Get input, player chooses
+    get_input(game);
+
+    //Check for forfeit
+    if(game->choice == 0){
+        balance += game->bet_amount * game-> multiplier;
+        return 0;
     }
 
-    //Check if third card is inside first two.
-    if(game->cards[0].value <= game->cards[2].value){
-        if(game->cards[2].value <= game->cards[1].value){
-            if(choice == 0){
-                return 1;
-            }
-        }
+    //Draw card
+    draw_card(game);
+
+    //Evaluate_round, lost = return 1
+    if(evaluate_round(game)){
+        printf("You lost!\n");
+        return 1;
     }
 
-    //Check if third card is outside first two. (lower)
-    if(game->cards[0].value >= game->cards[2].value){
-        if(game->cards[2].value <= game->cards[1].value){
-            if(choice == 1){
-                return 1;
-            }
-        }
-    }
+    //Round won
+    printf("You win!\n"); 
 
-     //Check if third card is outside first two. (higher)
-    if(game->cards[0].value <= game->cards[2].value){
-        if(game->cards[2].value >= game->cards[1].value){
-            if(choice == 1){
-                return 1;
-            }
-        }
+    //Increment round
+    if(game->round < 4){
+        game->round++;
+        return start_round(game);
     }
+    //All rounds won
+    balance += game->bet_amount * game-> multiplier;
     return 0;
 }
 
-void start_ride_the_bus(){
-    printf("Welcome to Ride The Bus!\n"); 
-    printf("Your balance: %d\n", balance); 
+static struct ride_the_bus init_game() {
+    struct ride_the_bus game;
 
-    while(1){
-        struct ride_the_bus game;
+    Deck deck;
+    deck_init(&deck, 1);
+    shuffle_deck(&deck);
 
-        Deck deck;
-        deck_init(&deck, 1);
-        shuffle_deck(&deck);  
+    game.frame.background_color = 0x2D;
 
-        game.deck = deck;
+    game.deck = deck;
+    game.drawn_cards = 0;
+
+    game.bet_amount = place_bet();
+    game.round = 1;
+    game.multiplier = 1;
+
+    return game;
+}
+
+void start_ride_the_bus() {
+    while(balance > 0){
+        printf("Welcome to Ride The Bus!\n"); 
+        printf("Your balance: %d\n", (int) balance);
         
-        game.bet_amount = ride_the_bus_money();
+        struct ride_the_bus game = init_game();
+        balance -= game.bet_amount;
 
-        int result = stage_1(&game);
+        //display_frame(&game.frame);
 
-        if (result == 1) {
-            printf("You win, your bet has increased 2x to: %d dollars!\n", game.bet_amount * 2);
-        } else {
-            balance -= game.bet_amount;
-            printf("You lost :(\n");
-            continue;
-        }
-
-        result = stage_2(&game);
-
-        switch (result) {
-            case 0:
-                balance -= game.bet_amount;
-                printf("You lost :(\n");
-                continue;
-            case 1:
-                printf("You win, your bet has increased 3x to: %d dollars!\n", game.bet_amount * 3);
-                break;
-            case 2:
-                balance += game.bet_amount;
-                continue;
-
-        }
-
-        result = stage_3(&game);
-
-        switch (result) {
-            case 0:
-                balance -= game.bet_amount;
-                printf("You lost :(\n");
-                continue;
-            case 1:
-                printf("You win, your bet has increased 4x to: %d dollars!\n", game.bet_amount * 4);
-                break;
-            case 2:
-                balance += game.bet_amount * 2;
-                continue;
-        }
-
-        result = stage_4(&game);
-
-        switch (result) {
-            case 0:
-                balance -= game.bet_amount;
-                printf("You lost :(\n");
-                continue;
-            case 1:
-                printf("You win, your bet has increased 20x to: %d dollars!\n", game.bet_amount * 20);
-                balance += game.bet_amount * 19;
-                break;
-            case 2:
-                balance += game.bet_amount * 3;
-                continue;
-        }
-
+        start_round(&game);
     }
 }

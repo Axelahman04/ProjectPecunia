@@ -9,7 +9,7 @@ typedef struct Deck;
 
 int main(){
     srand(time(NULL));
-    start_blackjack(); 
+    start_ride_the_bus(); 
 
     return 0;
 }
