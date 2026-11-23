@@ -4,6 +4,8 @@
 
 #define MAX_DECKS 8
 
+volatile int *btn_pointer = (volatile int*)0x040000d0;
+volatile int btn_pressed = 0;
 
 int card_color(Card* card) {
     switch(card->suit) {
@@ -91,7 +93,55 @@ int clamp(int value, int min, int max) {
     return value;
 }
 
-// ------------ AI GENERATED COME BACK (gemmani) ------
+void enable_input() {
+    *(btn_pointer + 3) = 1;
+    *(btn_pointer + 2) = 1;
+}
+
+int get_input() {
+
+    //Wait for input
+    while(btn_pressed = 0){}
+
+    //Check when btn is first pressed down
+    int start = get_cycles();
+
+    //True as long as btn is down
+    while (*btn_pointer & 1){
+        //Determine if button is pressed for sufficient time for long press
+        if((get_cycles() - start) > 1200000){
+
+            while(btn_pressed & 1){}
+            btn_pressed = 0;
+            return 1;
+        }
+    }
+    //Short press
+    btn_pressed = 0;
+    return 0;
+}
+
+//Choice function for choosing between any number of options 
+int get_choice(int num_choice){
+
+    int choice = 0;
+    int response = 0;
+
+    while(response == 0){
+        //Get input
+        response = get_input();
+
+        //Confirm
+        if(response == 1)
+            break;
+
+        choice = (choice + 1) % num_choice;
+        //Also update screen to indicate that choice changed
+    }
+    return choice;
+}
+
+// ------------ AI GENERATED COME BACK (gemini) ------
 
 // 1. Read the RISC-V internal cycle counter
 unsigned int get_cycles() {

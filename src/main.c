@@ -3,19 +3,19 @@
 #include <time.h>
 #include "deck.h"
 #include "graphics.h"
+#include "common.c"
 
 void display_frame(struct frame_data *data);
 void start_ride_the_bus();
 void start_blackjack();
 void my_srand(unsigned int seed);
+
 unsigned int get_cycles();
 typedef struct Deck;
+
 extern void enable_interrupt();
-
-volatile int *btn_pointer = (volatile int*)0x040000d0;
-
-int btn1_pressed = 0;
-int selected_game = 0; //0:Blackjack, 1:Ride The Bus, 2:Third game
+extern volatile int *btn_pointer;
+extern volatile int btn_pressed;
 
 int main(){
 
@@ -26,25 +26,23 @@ int main(){
     starting_frame.background_color = 0x1E;
     display_frame(&starting_frame);
 
-    *(btn_pointer + 3) = 1;
-    *(btn_pointer + 2) = 1;
     enable_interrupt();
+    enable_input();
 
-    while(1){
-        if(selected_game == 0){
+    int game_picked = get_choice(2);
+
+    switch(game_picked){
+        case 0:
+            //start_blackjack;
             starting_frame.background_color = 0x2E;
             display_frame(&starting_frame);
-        }
-        if(selected_game == 1){
-            starting_frame.background_color = 0x3E;
-            display_frame(&starting_frame);
-        }
-        if(selected_game == 2){
+            break;
+        case 1:
+            //start_ride_the_bus;
             starting_frame.background_color = 0x4E;
             display_frame(&starting_frame);
-        }
+            break;
     }
-
     return 0;
 }
 
@@ -54,7 +52,6 @@ void handle_interrupt(unsigned cause){
         //Button Interrupt
         case 18:
             *(btn_pointer + 3) = 1;
-            btn1_pressed = 1;
-            selected_game++;
+            btn_pressed = 1;
     }
 }
