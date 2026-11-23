@@ -1,5 +1,5 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef CARD_GRAPHIC_H
+#define CARD_GRAPHIC_H
 
 #define CARD_WIDTH 20
 #define CARD_HEIGHT 28

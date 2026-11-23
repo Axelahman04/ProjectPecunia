@@ -30,6 +30,9 @@ void draw_object(Sprite object, volatile char* frame){
         case SPRITE_CARD:
             start_pos = object.data.card_sprite.card.pos_x + object.data.card_sprite.card.pos_y * 320;
             break;
+        case SPRITE_BUTTON:
+            start_pos = object.data.button_sprite.button.pos_x + object.data.button_sprite.button.pos_y * 320;
+            break;
         default:
             start_pos = 0;
             break;

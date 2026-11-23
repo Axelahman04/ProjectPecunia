@@ -1,8 +1,8 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef BUTTON_GRAPHIC_H
+#define BUTTON_GRAPHIC_H
 
-#define CARD_WIDTH 20
-#define CARD_HEIGHT 20
+#define BUTTON_WIDTH 20
+#define BUTTON_HEIGHT 20
 
 static const unsigned char BUTTON_STATES[] = {0x12, 0x37, 0x7B};
 
