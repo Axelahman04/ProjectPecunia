@@ -24,7 +24,7 @@ struct ride_the_bus {
 };
 
 static int place_bet() {  
-    printf("How much do you want to bet?\n");   
+    //printf("How much do you want to bet?\n");   
     int bet_amount = get_number_input(1,(int) balance);  
 
     return bet_amount;
@@ -103,13 +103,13 @@ static int evaluate_round(struct ride_the_bus *game) {
 
 static void get_input(struct ride_the_bus *game) {
     if (game->round < 4){
-        printf("0:Forfeit, 1, 2\n"); 
-        game->choice = get_number_input(0,2); 
+        //printf("0:Forfeit, 1, 2\n"); 
+        //game->choice = get_number_input(0,2); 
     }
     
     if (game->round == 4){
-        printf("0:Forfeit, 1, 2, 3, 4\n"); 
-        game->choice = get_number_input(0,4); 
+        //printf("0:Forfeit, 1, 2, 3, 4\n"); 
+        //game->choice = get_number_input(0,4); 
     }
 }
 
@@ -125,7 +125,7 @@ static void draw_card(struct ride_the_bus *game) {
     //game->frame.object_list[game->frame.object_pointer] = new_card;
     //game->frame.object_pointer++;
 
-    printf("Drew card: value %d, suit %d\n", new_card.value, new_card.suit);
+    //printf("Drew card: value %d, suit %d\n", new_card.value, new_card.suit);
     //display_card(&new_card);
 }
 
@@ -145,12 +145,12 @@ static int start_round(struct ride_the_bus *game) {
 
     //Evaluate_round, lost = return 1
     if(evaluate_round(game)){
-        printf("You lost!\n");
+        //printf("You lost!\n");
         return 1;
     }
 
     //Round won
-    printf("You win!\n"); 
+    //printf("You win!\n"); 
 
     //Increment round
     if(game->round < 4){
@@ -183,8 +183,8 @@ static struct ride_the_bus init_game() {
 
 void start_ride_the_bus() {
     while(balance > 0){
-        printf("Welcome to Ride The Bus!\n"); 
-        printf("Your balance: %d\n", (int) balance);
+        //printf("Welcome to Ride The Bus!\n"); 
+        //printf("Your balance: %d\n", (int) balance);
         
         struct ride_the_bus game = init_game();
         balance -= game.bet_amount;

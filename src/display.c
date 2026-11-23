@@ -1,10 +1,10 @@
 #include "deck.h"
 #include "card_graphic.h"
 
-volatile char *const VGA_CTRL = (volatile char *) 0x04000100; 
+volatile int *const VGA_CTRL = (volatile int *) 0x04000100; 
 volatile char *const VGA_BUFFER_0 = (volatile char *) 0x08000000; 
 volatile char *const VGA_BUFFER_1 = (volatile char *) 0x08000000 + 320*240;
-int* CURRENT_BUFFER = VGA_BUFFER_0;
+volatile char *CURRENT_BUFFER = VGA_BUFFER_1;
 
 struct frame_data {
     char background_color;
@@ -14,11 +14,6 @@ struct frame_data {
 };
 
 void swap_buffers() {
-    if (CURRENT_BUFFER == VGA_BUFFER_0) {
-        CURRENT_BUFFER = VGA_BUFFER_1;
-    } else {
-        CURRENT_BUFFER = VGA_BUFFER_0;
-    }
 
     *(VGA_CTRL + 1) = (unsigned int) CURRENT_BUFFER;
 
@@ -26,6 +21,11 @@ void swap_buffers() {
 
     while (*(VGA_CTRL + 3) & 1) {
         // wait
+    }
+    if (CURRENT_BUFFER == VGA_BUFFER_0) {
+        CURRENT_BUFFER = VGA_BUFFER_1;
+    } else {
+        CURRENT_BUFFER = VGA_BUFFER_0;
     }
 }
 
