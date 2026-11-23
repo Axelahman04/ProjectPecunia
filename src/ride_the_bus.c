@@ -169,7 +169,7 @@ static struct ride_the_bus init_game() {
     deck_init(&deck, 1);
     shuffle_deck(&deck);
 
-    game.frame.background_color = 0x2D;
+    game.frame.background_color = 0x3D;
 
     game.deck = deck;
     game.drawn_cards = 0;
