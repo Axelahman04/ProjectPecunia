@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "deck.h"
-#include "graphics.h"
 
-int get_number_input(int min, int max);
 int clamp(int value, int min, int max);
-void display_frame(struct frame_data *data);
 
 static float balance = 1000.0;
 
@@ -19,13 +16,13 @@ struct ride_the_bus {
     int multiplier;
     int round;
     int choice;
-
-    struct frame_data frame;
 };
 
 static int place_bet() {  
     //printf("How much do you want to bet?\n");   
-    int bet_amount = get_number_input(1,(int) balance);  
+    
+    //Get real bet amount
+    int bet_amount = 100;
 
     return bet_amount;
 }
@@ -111,22 +108,15 @@ static void get_input(struct ride_the_bus *game) {
         //printf("0:Forfeit, 1, 2, 3, 4\n"); 
         //game->choice = get_number_input(0,4); 
     }
+    return;
 }
 
 static void draw_card(struct ride_the_bus *game) {
     Card new_card = next_card(&game->deck);
 
-    new_card.pos_x = 120 + (50 * game->drawn_cards);
-    new_card.pos_y = 40;
-
     game->cards[game->drawn_cards] = new_card;
     game->drawn_cards++;
 
-    //game->frame.object_list[game->frame.object_pointer] = new_card;
-    //game->frame.object_pointer++;
-
-    //printf("Drew card: value %d, suit %d\n", new_card.value, new_card.suit);
-    //display_card(&new_card);
 }
 
 static int start_round(struct ride_the_bus *game) {
@@ -168,8 +158,6 @@ static struct ride_the_bus init_game() {
     Deck deck;
     deck_init(&deck, 1);
     shuffle_deck(&deck);
-
-    game.frame.background_color = 0x3D;
 
     game.deck = deck;
     game.drawn_cards = 0;

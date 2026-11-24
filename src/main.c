@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "deck.h"
-#include "graphics.h"
 
-void display_frame(struct frame_data *data);
 void start_ride_the_bus();
 void start_blackjack();
 void my_srand(unsigned int seed);
@@ -23,11 +21,6 @@ int main(){
     int r_seed = get_cycles();
     my_srand(r_seed); 
 
-    struct frame_data starting_frame;
-    starting_frame.object_pointer = 0;
-    starting_frame.background_color = 0x1E;
-    display_frame(&starting_frame);
-
     enable_interrupt();
     enable_input();
 
@@ -35,14 +28,10 @@ int main(){
 
     switch(game_picked){
         case 0:
-            start_blackjack();
-            starting_frame.background_color = 0x2E;
-            display_frame(&starting_frame);
+            //start_blackjack();
             break;
         case 1:
-            //start_ride_the_bus;
-            starting_frame.background_color = 0x1C;
-            display_frame(&starting_frame);
+            //start_ride_the_bus();
             break;
     }
     while(1){}

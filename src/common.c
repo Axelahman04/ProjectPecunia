@@ -52,7 +52,6 @@ void display_card(Card* card) {
 
 }
 
-
 void generate_standard_cards(Card* start_location) {
     int index = 0;
     for (int suit = 0; suit < 4; suit++) {
@@ -102,15 +101,8 @@ int deck_contains(Card *deck, int value) {
         if (deck[i].value == value)
             return 1;
     }
-
     return 0;
 }
-
-
-int get_number_input(int min, int max) {
-
-}
-
 
 int clamp(int value, int min, int max) {
     if (value < min)
