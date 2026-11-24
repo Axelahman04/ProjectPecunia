@@ -1,1 +1,6 @@
 **/game
+*.o
+*.elf
+*.bin
+*.elf.txt
+build/
