@@ -34,7 +34,7 @@ typedef struct {
 } Sprite;
 
 void set_state_values(Sprite* s, int current_state, int max_state) {
-    int state_space = sizeof(s.states) / sizeof(unsigned char); 
+    int state_space = sizeof(s->states) / sizeof(unsigned char); 
 
     if (max_state > state_space || max_state < 0) {
         max_state = state_space;

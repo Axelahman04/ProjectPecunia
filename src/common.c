@@ -7,6 +7,29 @@
 volatile int *btn_pointer = (volatile int*)0x040000d0;
 volatile int btn_pressed = 0;
 
+// ------------ AI GENERATED COME BACK (gemini) ------
+
+// 1. Read the RISC-V internal cycle counter
+unsigned int get_cycles() {
+    unsigned int cycles;
+    // 'rdcycle' is a standard RISC-V instruction that returns the 
+    // number of clock cycles executed since the processor booted.
+    asm volatile ("rdcycle %0" : "=r" (cycles));
+    return cycles;
+}
+
+// 2. Linear Congruential Generator (from previous step)
+static unsigned int next = 1;
+
+void my_srand(unsigned int seed) {
+    next = seed;
+}
+
+int my_rand(void) {
+    next = next * 1103515245 + 12345;
+    return (unsigned int)(next / 65536) % 32768;
+}
+
 int card_color(Card* card) {
     switch(card->suit) {
         case 0: 
@@ -104,7 +127,7 @@ int get_input() {
     while(btn_pressed = 0){}
 
     //Check when btn is first pressed down
-    int start = get_cycles();
+    unsigned int start = get_cycles();
 
     //True as long as btn is down
     while (*btn_pointer & 1){
@@ -139,27 +162,4 @@ int get_choice(int num_choice){
         //Also update screen to indicate that choice changed
     }
     return choice;
-}
-
-// ------------ AI GENERATED COME BACK (gemini) ------
-
-// 1. Read the RISC-V internal cycle counter
-unsigned int get_cycles() {
-    unsigned int cycles;
-    // 'rdcycle' is a standard RISC-V instruction that returns the 
-    // number of clock cycles executed since the processor booted.
-    asm volatile ("rdcycle %0" : "=r" (cycles));
-    return cycles;
-}
-
-// 2. Linear Congruential Generator (from previous step)
-static unsigned int next = 1;
-
-void my_srand(unsigned int seed) {
-    next = seed;
-}
-
-int my_rand(void) {
-    next = next * 1103515245 + 12345;
-    return (unsigned int)(next / 65536) % 32768;
 }

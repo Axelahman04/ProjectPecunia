@@ -3,12 +3,12 @@
 #include <time.h>
 #include "deck.h"
 #include "graphics.h"
-#include "common.c"
 
 void display_frame(struct frame_data *data);
 void start_ride_the_bus();
 void start_blackjack();
 void my_srand(unsigned int seed);
+int get_choice(int num_choice);
 
 unsigned int get_cycles();
 typedef struct Deck;
