@@ -1,0 +1,3 @@
+/*
+Print text function that uses print char and print num helper functions
+*/

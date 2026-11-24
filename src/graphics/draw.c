@@ -1,3 +1,15 @@
+/*
+Purpose:
+Draws each frame
+
+Functions:
+    draw_blackjack(game)
+    draw_ride_the_bus(game)
+    draw_menu()
+*/
+
+
+
 extern volatile char *CURRENT_BUFFER;
 
 void swap_buffer();
