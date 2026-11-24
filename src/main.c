@@ -9,6 +9,7 @@ void start_ride_the_bus();
 void start_blackjack();
 void my_srand(unsigned int seed);
 int get_choice(int num_choice);
+int enable_input();
 
 unsigned int get_cycles();
 typedef struct Deck;
