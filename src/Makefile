@@ -1,26 +1,24 @@
-SRC_DIR ?= ./
-OBJ_DIR ?= ./
-SOURCES ?= $(shell find $(SRC_DIR) -name '*.c' -or -name '*.S')
-OBJECTS ?= $(addsuffix .o, $(basename $(notdir $(SOURCES))))
-LINKER ?= $(SRC_DIR)/dtekv-script.lds
+SRC_DIR   ?= .
+BUILD_DIR ?= build
+SOURCES   := $(shell find $(SRC_DIR) -name '*.c' -or -name '*.S')
+OBJECTS   := $(addsuffix .o, $(basename $(notdir $(SOURCES))))
+LINKER    := $(CURDIR)/platform/dtekv-script.lds
 
 TOOLCHAIN ?= riscv32-unknown-elf-
-CFLAGS ?= -Wall -nostdlib -O3 -mabi=ilp32 -march=rv32imzicsr -fno-builtin
-
+CFLAGS ?= -Wall -nostdlib -O3 -mabi=ilp32 -march=rv32imzicsr -fno-builtin \
+          -I$(CURDIR)/platform -I$(CURDIR)/gfx -I$(CURDIR)/ui -I$(CURDIR)/game
 
 build: clean main.bin
 
-main.elf: 
-	$(TOOLCHAIN)gcc -c $(CFLAGS) $(SOURCES)
-	$(TOOLCHAIN)ld -o $@ -T $(LINKER) $(filter-out boot.o, $(OBJECTS)) softfloat.a
+main.elf:
+	mkdir -p $(BUILD_DIR)
+	cd $(BUILD_DIR) && $(TOOLCHAIN)gcc -c $(CFLAGS) $(addprefix $(CURDIR)/,$(SOURCES))
+	cd $(BUILD_DIR) && $(TOOLCHAIN)ld -o $(CURDIR)/$@ -T $(LINKER) \
+	    $(filter-out boot.o,$(OBJECTS)) $(CURDIR)/platform/softfloat.a
 
 main.bin: main.elf
 	$(TOOLCHAIN)objcopy --output-target binary $< $@
 	$(TOOLCHAIN)objdump -D $< > $<.txt
 
 clean:
-	rm -f *.o *.elf *.bin *.txt
-
-TOOL_DIR ?= ./tools
-run: main.bin
-	make -C $(TOOL_DIR) "FILE_TO_RUN=$(CURDIR)/$<"
+	rm -rf $(BUILD_DIR) main.elf main.bin main.elf.txt
