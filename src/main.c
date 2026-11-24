@@ -13,8 +13,7 @@ unsigned int get_cycles();
 typedef struct Deck;
 
 extern void enable_interrupt();
-extern volatile int *btn_pointer;
-extern volatile int btn_pressed;
+void draw_background(char color);
 
 int main(){
 
@@ -28,22 +27,14 @@ int main(){
 
     switch(game_picked){
         case 0:
-            //start_blackjack();
+            //start_ride_the_bus();
+            draw_background(0x1C);
             break;
         case 1:
             //start_ride_the_bus();
+            draw_background(0x2E);
             break;
     }
     while(1){}
     return 0;
-}
-
-void handle_interrupt(unsigned cause){
-
-    switch(cause){
-        //Button Interrupt
-        case 18:
-            *(btn_pointer + 3) = 1;
-            btn_pressed = 1;
-    }
 }

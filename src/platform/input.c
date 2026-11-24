@@ -4,7 +4,7 @@ volatile int btn_pressed = 0;
 int get_sw(void){
   volatile int* switch_values = (volatile int*) 0x04000010;
   return (*switch_values & 0x3FF);
- }
+}
 
 void enable_input() {
     *(btn_pointer + 3) = 1;
