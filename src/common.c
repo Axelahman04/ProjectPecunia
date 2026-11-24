@@ -131,21 +131,23 @@ int get_input() {
     //Wait for input
     while(btn_pressed == 0){}
 
-    for(volatile int i = 0; i<1500000; i++){}
+    int confirm = get_sw() & 1;
+
+    for (volatile int i = 0; i < 500000; i++) {}
 
     btn_pressed = 0;
 
-    if(get_sw() & 1)
-        return 1;
-
-    return 0;
+    return confirm;
 }
 
 //Choice function for choosing between any number of options 
 int get_choice(int num_choice){
+    volatile int *leds = (volatile int*)0x04000000;
 
     int choice = 0;
     int response = 0;
+
+    *leds = 1; // LED 0 on = choice 0
 
     while(response == 0){
         //Get input
@@ -156,6 +158,8 @@ int get_choice(int num_choice){
             return choice;
 
         choice = (choice + 1) % num_choice;
+
+        *leds = (1 << choice); // LED 0 = choice 0, LED 1 = choice 1
 
         //Also update screen to indicate that choice changed
     }

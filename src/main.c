@@ -35,13 +35,13 @@ int main(){
 
     switch(game_picked){
         case 0:
-            //start_blackjack;
+            start_blackjack();
             starting_frame.background_color = 0x2E;
             display_frame(&starting_frame);
             break;
         case 1:
             //start_ride_the_bus;
-            starting_frame.background_color = 0x4E;
+            starting_frame.background_color = 0x1C;
             display_frame(&starting_frame);
             break;
     }
