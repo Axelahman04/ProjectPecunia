@@ -7,6 +7,11 @@
 volatile int *btn_pointer = (volatile int*)0x040000d0;
 volatile int btn_pressed = 0;
 
+int get_sw(void){
+  volatile int* switch_values = (volatile int*) 0x04000010;
+  return (*switch_values & 0x3FF);
+ }
+
 // ------------ AI GENERATED COME BACK (gemini) ------
 
 // 1. Read the RISC-V internal cycle counter
@@ -124,23 +129,15 @@ void enable_input() {
 int get_input() {
 
     //Wait for input
-    while(btn_pressed = 0){}
+    while(btn_pressed == 0){}
 
-    //Check when btn is first pressed down
-    unsigned int start = get_cycles();
+    for(volatile int i = 0; i<1500000; i++){}
 
-    //True as long as btn is down
-    while (*btn_pointer & 1){
-        //Determine if button is pressed for sufficient time for long press
-        if((get_cycles() - start) > 1200000){
-
-            while(btn_pressed & 1){}
-            btn_pressed = 0;
-            return 1;
-        }
-    }
-    //Short press
     btn_pressed = 0;
+
+    if(get_sw() & 1)
+        return 1;
+
     return 0;
 }
 
@@ -156,9 +153,10 @@ int get_choice(int num_choice){
 
         //Confirm
         if(response == 1)
-            break;
+            return choice;
 
         choice = (choice + 1) % num_choice;
+
         //Also update screen to indicate that choice changed
     }
     return choice;

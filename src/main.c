@@ -24,6 +24,7 @@ int main(){
     my_srand(r_seed); 
 
     struct frame_data starting_frame;
+    starting_frame.object_pointer = 0;
     starting_frame.background_color = 0x1E;
     display_frame(&starting_frame);
 
@@ -44,6 +45,7 @@ int main(){
             display_frame(&starting_frame);
             break;
     }
+    while(1){}
     return 0;
 }
 
