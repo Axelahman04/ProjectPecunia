@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "deck.h"
+#include "../deck.h"
 
 int clamp(int value, int min, int max);
 

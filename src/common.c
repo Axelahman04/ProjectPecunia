@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "deck.h"
 
 #define MAX_DECKS 8
