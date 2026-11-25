@@ -28,11 +28,11 @@ int main(){
     switch(game_picked){
         case 0:
             //start_ride_the_bus();
-            draw_background(0x1C);
+            test_draw(0xE3);
             break;
         case 1:
             //start_ride_the_bus();
-            draw_background(0x2E);
+            test_draw(0x2E);
             break;
     }
     while(1){}
