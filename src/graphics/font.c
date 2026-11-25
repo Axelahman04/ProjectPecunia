@@ -85,3 +85,16 @@ const unsigned char font8x8[FONT_LAST - FONT_FIRST + 1][FONT_H] = {
     { 0x33, 0x33, 0x33, 0x1E, 0x0C, 0x0C, 0x1E, 0x00},   // U+0059 (Y)
     { 0x7F, 0x63, 0x31, 0x18, 0x4C, 0x66, 0x7F, 0x00},   // U+005A (Z)
 };
+
+/*----------------------------------------------------------------------*/
+
+void draw_bitmap_1bit(const unsigned char *data, int w, int h,
+    int x, int y, unsigned char color, int scale);
+
+void draw_char(int x, int y, char c, unsigned char color, int scale) {
+    draw_bitmap_1bit(font8x8[c - FONT_FIRST], 8, 8, x, y, color, scale);
+}
+
+void draw_string(int x, int y, const char *s, unsigned char color, int scale) {
+
+}

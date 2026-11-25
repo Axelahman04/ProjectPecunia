@@ -16,6 +16,7 @@ Functions:
 extern volatile char* CURRENT_BUFFER;
 
 void swap_buffer();
+void draw_char(int x, int y, char c, unsigned char color, int scale);
 
 void draw_blank_background(char color){
     for (int i = 0; i < (FRAME_WIDTH * FRAME_HEIGHT); i++)
@@ -42,14 +43,7 @@ void draw_react(int x, int y, char color, int scale) {
 
 void test_draw(int color) {
     draw_blank_background(POKER_COLOR);
-    draw_react(100, 100, color, 8);
-    
-    draw_react(124, 100, color, 8);
-
-    draw_react(100, 120, color, 8);
-    draw_react(108, 124, color, 8);
-    draw_react(116, 124, color, 8);
-    draw_react(124, 120, color, 8);
+    draw_char(100, 100, 'S', color, 1);
 
     swap_buffer();
 }
