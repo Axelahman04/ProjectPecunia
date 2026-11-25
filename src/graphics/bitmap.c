@@ -20,7 +20,7 @@ void draw_bitmap_1bit(const unsigned char *data, int w, int h,
                     draw_react(x, y, color, scale);
                 } 
                 x += scale;
-                y += scale;
             }
+            y += scale;
         }
     }
