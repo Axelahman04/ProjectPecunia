@@ -8,19 +8,22 @@ void memcp(unsigned char* array_a, unsigned char* array_b, int size) {
 
 void draw_bitmap_1bit(const unsigned char *data, int w, int h,
     int x, int y, unsigned char color, int scale) {
+        int start_x = x;
+
         for (int r = 0; r < h; r++) {
             int row_size = (w + 8 - 1) / 8;
             unsigned char* row;
             memcp(row, &data[r * row_size], row_size * sizeof(char));
 
             for (int c = 0; c < w; c++) {
-                unsigned char bit = (row[c / 8] >> c) & 0xFE;
+                unsigned char bit = (row[c / 8] >> c) & 0x1;
                 
                 if (bit) {
                     draw_react(x, y, color, scale);
                 } 
                 x += scale;
             }
+            x = start_x;
             y += scale;
         }
     }
