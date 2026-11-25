@@ -46,10 +46,10 @@ void test_draw(int color) {
     
     draw_react(124, 100, color, 8);
 
-    draw_react(100, 80, color, 8);
-    draw_react(108, 76, color, 8);
-    draw_react(116, 76, color, 8);
-    draw_react(124, 80, color, 8);
+    draw_react(100, 120, color, 8);
+    draw_react(108, 124, color, 8);
+    draw_react(116, 124, color, 8);
+    draw_react(124, 120, color, 8);
 
     swap_buffer();
 }
