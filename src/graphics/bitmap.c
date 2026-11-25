@@ -13,8 +13,8 @@ void draw_bitmap_1bit(const unsigned char *data, int w, int h,
         int row_size = (w + 8 - 1) / 8;
 
         for (int r = 0; r < h; r++) {
+            unsigned char* row = &data[r * row_size];
             for (int c = 0; c < w; c++) {
-                unsigned char* row = &data[r * row_size];
                 unsigned char bit = (row[c / 8] >> c) & 0x1;
                 
                 if (bit) {

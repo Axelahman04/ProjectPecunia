@@ -104,4 +104,10 @@ void draw_char(int x, int y, char c, unsigned char color, int scale) {
 
 void draw_string(int x, int y, const char *s, unsigned char color, int scale) {
 
+    int start_x = x;
+    int x_spacing = 8 * scale;
+    
+    for(int i = 0; s[i] != '\0'; i++){
+        draw_char(x + i * x_spacing, y, s[i], color, scale);
+    }
 }

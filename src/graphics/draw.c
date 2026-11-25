@@ -43,7 +43,7 @@ void draw_react(int x, int y, char color, int scale) {
 
 void test_draw(int color) {
     draw_blank_background(POKER_COLOR);
-    draw_char(100, 100, 'B', color, 1);
+    draw_string(10, 10, "GAME", color, 1);
 
     swap_buffer();
 }
