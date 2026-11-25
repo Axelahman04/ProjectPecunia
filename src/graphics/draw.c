@@ -32,7 +32,7 @@ void draw_react(int x, int y, char color, int scale) {
 
     for (int i = 0; i < scale; i++) {
         for (int r = 0; r < scale; r++) {
-            if ((position % 320)  + i > FRAME_WIDTH || (position / 320) + r > FRAME_HEIGHT ) {
+            if ((position % 320)  + i > (FRAME_WIDTH - 1) || (position / 320) + r > (FRAME_HEIGHT -1)) {
                 continue;
             }
 
@@ -43,7 +43,7 @@ void draw_react(int x, int y, char color, int scale) {
 
 void test_draw(int color) {
     draw_blank_background(POKER_COLOR);
-    draw_char(100, 100, 'S', color, 1);
+    draw_char(100, 100, 'B', color, 1);
 
     swap_buffer();
 }
