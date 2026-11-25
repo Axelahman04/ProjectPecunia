@@ -18,7 +18,7 @@ void draw_bitmap_1bit(const unsigned char *data, int w, int h,
             for (int c = 0; c < w; c++) {
                 unsigned char bit = (row[c / 8] >> c) & 0x1;
                 
-                if (bit) {
+                if (!bit) {
                     draw_react(x, y, color, scale);
                 } 
                 x += scale;
