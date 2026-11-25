@@ -23,18 +23,19 @@ int main(){
     enable_interrupt();
     enable_input();
 
-    int game_picked = get_choice(2);
+    while(1) {
+        int game_picked = get_choice(2);
 
-    switch(game_picked){
-        case 0:
-            //start_ride_the_bus();
-            test_draw(0xE3);
-            break;
-        case 1:
-            //start_ride_the_bus();
-            test_draw(0x2E);
-            break;
+        switch(game_picked){
+            case 0:
+                //start_ride_the_bus();
+                test_draw(0xE3);
+                break;
+            case 1:
+                //start_ride_the_bus();
+                test_draw(0x2E);
+                break;
+        }
     }
-    while(1){}
     return 0;
 }
