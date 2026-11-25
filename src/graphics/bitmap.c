@@ -2,7 +2,7 @@ void draw_react(int x, int y, char color, int scale);
 
 void memcp(unsigned char* array_a, unsigned char* array_b, int size) {
     for (int i = 0; i < 2; i++) {
-        array_b[i] = array_a[i];
+        array_a[i] = array_b[i];
     }
 }
 
