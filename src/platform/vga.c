@@ -3,7 +3,7 @@ volatile char *const VGA_BUFFER_0 = (volatile char *) 0x08000000;
 volatile char *const VGA_BUFFER_1 = (volatile char *) 0x08000000 + 320*240;
 volatile char *CURRENT_BUFFER = VGA_BUFFER_1;
 
-void swap_buffers() {
+void swap_buffer() {
 
     *(VGA_CTRL + 1) = (unsigned int) CURRENT_BUFFER;
 
