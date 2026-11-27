@@ -8,6 +8,7 @@ void start_blackjack();
 void my_srand(unsigned int seed);
 int get_choice(int num_choice);
 int enable_input();
+void test_draw(char color);
 
 unsigned int get_cycles();
 typedef struct Deck;

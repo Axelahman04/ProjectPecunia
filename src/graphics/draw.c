@@ -9,6 +9,8 @@ Functions:
     draw_menu()
 */
 
+#include "font.h";
+
 #define FRAME_WIDTH 320
 #define FRAME_HEIGHT 240
 #define POKER_COLOR 0x2D
@@ -41,7 +43,7 @@ void draw_react(int x, int y, char color, int scale) {
     }
 }
 
-void test_draw(int color) {
+void test_draw(char color) {
     draw_blank_background(POKER_COLOR);
     draw_string(10, 10, "GAME", color, 1);
 
